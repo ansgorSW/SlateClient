@@ -7,7 +7,9 @@
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <script>
@@ -30,6 +32,7 @@
                     boxShadow: {
                         'purple-glow': '0 0 35px -5px rgba(157, 78, 221, 0.45)',
                         'purple-glow-sm': '0 0 15px 0px rgba(157, 78, 221, 0.3)',
+                        'hud-glow': '0 8px 32px 0 rgba(13, 9, 25, 0.7)',
                     }
                 }
             }
@@ -37,20 +40,63 @@
     </script>
 
     <style>
-        body { background-color: #09070f; color: #f1f0f7; overflow-x: hidden; }
-        .bg-grid-pattern { background-image: radial-gradient(rgba(157, 78, 221, 0.15) 1px, transparent 1px); background-size: 32px 32px; }
-        .glass-panel { background: rgba(20, 15, 36, 0.65); backdrop-filter: blur(16px); border: 1px solid rgba(157, 78, 221, 0.18); }
-        .hud-window { background: rgba(14, 11, 24, 0.88); backdrop-filter: blur(20px); border: 1px solid rgba(199, 125, 255, 0.25); box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 25px rgba(157, 78, 221, 0.2); }
+        body {
+            background-color: #09070f;
+            color: #f1f0f7;
+            overflow-x: hidden;
+        }
+
+        .bg-grid-pattern {
+            background-image: radial-gradient(rgba(157, 78, 221, 0.15) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+
+        .glass-panel {
+            background: rgba(20, 15, 36, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(157, 78, 221, 0.18);
+        }
+
+        .hud-window {
+            background: rgba(14, 11, 24, 0.88);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(199, 125, 255, 0.25);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 25px rgba(157, 78, 221, 0.2);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(15, 10, 26, 0.5);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(157, 78, 221, 0.4);
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(199, 125, 255, 0.7);
+        }
     </style>
 </head>
-<body class="font-sans antialiased relative">
+<body class="font-sans antialiased selection:bg-slateAccent selection:text-white relative">
 
-    <!-- HEADER -->
-    <header class="fixed top-0 left-0 right-0 z-50 py-4 px-4 sm:px-8">
+    <!-- Ambient Glowing Orbs -->
+    <div class="fixed top-[-10%] left-[-10%] w-[500px] h-[500px] bg-slateDarkGlow/30 rounded-full blur-[140px] pointer-events-none z-0"></div>
+    <div class="fixed top-[40%] right-[-10%] w-[600px] h-[600px] bg-slateAccent/20 rounded-full blur-[160px] pointer-events-none z-0"></div>
+    <div class="fixed bottom-[-10%] left-[20%] w-[500px] h-[500px] bg-purple-900/20 rounded-full blur-[140px] pointer-events-none z-0"></div>
+    <div class="fixed inset-0 bg-grid-pattern opacity-40 pointer-events-none z-0"></div>
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4 px-4 sm:px-8">
         <div class="max-w-7xl mx-auto glass-panel rounded-2xl px-5 py-3 flex items-center justify-between shadow-purple-glow-sm">
+            <!-- Brand Logo (5x Click Trigger for Admin) -->
             <a href="#" class="flex items-center gap-3 group" onclick="handleSlateTextClick(event)">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-slateAccent to-purple-900 flex items-center justify-center text-white shadow-purple-glow">
-                    <svg class="w-6 h-6 fill-current text-white" viewBox="0 0 24 24"><path d="M12 3L2 19h20L12 3zm0 4.2L17.5 17h-11L12 7.2z"/></svg>
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-slateAccent to-purple-900 flex items-center justify-center text-white shadow-purple-glow group-hover:scale-105 transition-transform duration-300">
+                    <svg class="w-6 h-6 fill-current text-white" viewBox="0 0 24 24">
+                        <path d="M12 3L2 19h20L12 3zm0 4.2L17.5 17h-11L12 7.2z" />
+                    </svg>
                 </div>
                 <div>
                     <span class="font-extrabold text-xl tracking-wider text-white flex items-center gap-2 select-none">
@@ -59,37 +105,743 @@
                     <span class="text-[10px] text-gray-400 block tracking-widest uppercase font-mono select-none">Fabric 26.3 Client</span>
                 </div>
             </a>
-            <button onclick="openModal('download-modal')" class="px-4 py-2 rounded-xl bg-slateAccent text-white text-sm font-semibold shadow-purple-glow">Download</button>
+
+            <!-- Nav Links -->
+            <nav class="hidden lg:flex items-center gap-7 text-sm font-medium text-gray-300">
+                <a href="#modules" class="hover:text-slateGlow transition-colors">Module & HUD</a>
+                <a href="#cosmetics" class="hover:text-slateGlow transition-colors">Cosmetics</a>
+                <a href="#skins" class="hover:text-slateGlow transition-colors">Skin-Manager</a>
+                <a href="#icons" class="hover:text-slateGlow transition-colors">Badges & Icons</a>
+                <a href="#emotes" class="hover:text-slateGlow transition-colors">Emotes</a>
+                <a href="#friends" class="hover:text-slateGlow transition-colors">Freunde</a>
+                <a href="#multi-instance" class="hover:text-slateGlow transition-colors text-slateGlow font-bold">Multi-Instance</a>
+                <a href="#about" class="hover:text-slateGlow transition-colors">Über uns</a>
+            </nav>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-3">
+                <button onclick="openModal('download-modal')" class="relative group overflow-hidden rounded-xl p-[1px] font-semibold text-sm">
+                    <span class="absolute inset-0 bg-gradient-to-r from-slateAccent via-purple-500 to-slateGlow rounded-xl group-hover:opacity-100 opacity-80 transition-opacity"></span>
+                    <span class="relative px-4 py-2.2 rounded-[11px] bg-slateBg flex items-center gap-2 text-white group-hover:bg-transparent transition-all duration-300">
+                        <i class="fa-solid fa-download text-slateGlow group-hover:text-white transition-colors"></i>
+                        <span>Download</span>
+                    </span>
+                </button>
+                <button onclick="toggleMobileMenu()" class="lg:hidden text-gray-300 hover:text-white p-2">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden lg:hidden max-w-7xl mx-auto mt-2 glass-panel rounded-2xl p-5 flex-col gap-4 text-center border border-slateAccent/30 shadow-2xl">
+            <a href="#modules" onclick="toggleMobileMenu()" class="text-gray-300 hover:text-slateGlow py-1">Module & HUD</a>
+            <a href="#cosmetics" onclick="toggleMobileMenu()" class="text-gray-300 hover:text-slateGlow py-1">Cosmetics</a>
+            <a href="#skins" onclick="toggleMobileMenu()" class="text-gray-300 hover:text-slateGlow py-1">Skin-Manager</a>
+            <a href="#icons" onclick="toggleMobileMenu()" class="text-gray-300 hover:text-slateGlow py-1">Badges & Icons</a>
+            <a href="#emotes" onclick="toggleMobileMenu()" class="text-gray-300 hover:text-slateGlow py-1">Emote Wheel</a>
+            <a href="#friends" onclick="toggleMobileMenu()" class="text-gray-300 hover:text-slateGlow py-1">Freunde</a>
+            <a href="#multi-instance" onclick="toggleMobileMenu()" class="text-slateGlow py-1 font-bold">Multi-Instance</a>
+            <a href="#about" onclick="toggleMobileMenu()" class="text-gray-300 hover:text-slateGlow py-1">Über uns</a>
+            <button onclick="openModal('impressum-modal'); toggleMobileMenu()" class="text-gray-400 text-xs py-1">Impressum & Datenschutz</button>
         </div>
     </header>
 
-    <!-- HERO -->
-    <section class="relative pt-44 pb-20 px-4 text-center max-w-4xl mx-auto">
-        <h1 class="text-5xl font-extrabold text-white mb-6">Der Next-Gen Minecraft Client</h1>
-        <button onclick="openModal('download-modal')" class="px-8 py-4 rounded-xl bg-gradient-to-r from-slateAccent to-purple-700 text-white font-bold shadow-purple-glow">
-            Jetzt Herunterladen
-        </button>
+    <!-- HERO SECTION -->
+    <section class="relative pt-36 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto z-10">
+        <div class="text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-slateAccent/40 text-slateGlow text-xs font-mono font-semibold mb-6 shadow-purple-glow-sm">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                FABRIC 26.3 COMPATIBLE · CLIENT V0.3.7
+            </div>
+            
+            <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+                Der Next-Gen Minecraft Client für <span class="bg-gradient-to-r from-slateGlow via-slateAccent to-purple-400 bg-clip-text text-transparent">höchste Performance</span> & Design.
+            </h1>
+            
+            <p class="text-lg text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+                Slate kombiniert ein butterweiches HUD, synchrone Cosmetics, flexiblen Skin-Manager und exklusive Rang-Icons in einem schlanken Fabric-Setup.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+                <button onclick="openModal('download-modal')" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-slateAccent to-purple-700 hover:from-purple-600 hover:to-slateAccent text-white font-bold text-base shadow-purple-glow hover:scale-[1.02] transition-all flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-rocket"></i>
+                    <span>Jetzt Herunterladen (Fabric 26.3)</span>
+                </button>
+                <a href="#modules" class="w-full sm:w-auto px-8 py-4 rounded-xl glass-panel hover:bg-white/10 text-white font-semibold text-base transition-all flex items-center justify-center gap-2 border border-slateAccent/30">
+                    <span>Features erkunden</span>
+                    <i class="fa-solid fa-arrow-down text-sm text-slateGlow"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- LIVE INTERACTIVE HUD PREVIEW MOCKUP -->
+        <div class="relative mx-auto max-w-5xl rounded-2xl p-1 bg-gradient-to-b from-slateAccent/40 via-purple-900/20 to-transparent shadow-purple-glow">
+            <div class="hud-window rounded-xl overflow-hidden text-left font-mono relative min-h-[420px] flex flex-col justify-between p-4 sm:p-6 bg-slateBg/90">
+                
+                <div class="flex flex-wrap justify-between items-start gap-4 z-10 border-b border-white/10 pb-4">
+                    <div class="space-y-1">
+                        <div class="text-blue-400 font-bold text-lg sm:text-xl flex items-center gap-2">
+                            <span id="hero-fps-display">219 FPS</span>
+                            <span class="text-xs px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 font-normal">Smooth</span>
+                        </div>
+                        <div class="text-emerald-400 text-xs sm:text-sm flex items-center gap-3">
+                            <span>Ping: <strong id="hero-ping-display">35 ms</strong></span>
+                            <span class="text-gray-500">|</span>
+                            <span class="text-blue-300">X: -2763 Y: 128 Z: -1831</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel px-4 py-2 rounded-xl border border-slateAccent/30 flex items-center gap-3">
+                        <div class="w-6 h-6 rounded bg-slateAccent flex items-center justify-center text-white text-xs">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 3L2 19h20L12 3z"/></svg>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-white tracking-widest">SLATE CLIENT</div>
+                            <div class="text-[10px] text-gray-400">26.3 · EINSTELLUNGEN</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6 z-10">
+                    <div class="glass-panel p-3.5 rounded-xl border border-white/10 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-location-crosshairs text-slateGlow text-lg"></i>
+                            <div>
+                                <div class="text-xs font-bold text-white">Koordinaten Module</div>
+                                <div class="text-[10px] text-gray-400">XYZ, Biom & Blickrichtung</div>
+                            </div>
+                        </div>
+                        <span class="px-2 py-0.5 text-[10px] rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">AKTIV</span>
+                    </div>
+
+                    <div class="glass-panel p-3.5 rounded-xl border border-white/10 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-shield-halved text-purple-400 text-lg"></i>
+                            <div>
+                                <div class="text-xs font-bold text-white">Rüstungs-Status</div>
+                                <div class="text-[10px] text-gray-400">Haltbarkeit & Items</div>
+                            </div>
+                        </div>
+                        <span class="px-2 py-0.5 text-[10px] rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">AKTIV</span>
+                    </div>
+
+                    <div class="glass-panel p-3.5 rounded-xl border border-white/10 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-mountain text-slateAccent text-lg"></i>
+                            <div>
+                                <div class="text-xs font-bold text-white">Slate Badge</div>
+                                <div class="text-[10px] text-gray-400">Wasserzeichen im HUD</div>
+                            </div>
+                        </div>
+                        <span class="px-2 py-0.5 text-[10px] rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">AKTIV</span>
+                    </div>
+                </div>
+
+                <div class="pt-3 border-t border-white/10 flex flex-wrap justify-between items-center text-[11px] text-gray-400 z-10 gap-2">
+                    <div class="flex items-center gap-3">
+                        <button class="px-3 py-1.5 rounded bg-white/10 hover:bg-slateAccent/40 text-white text-xs border border-white/10 transition-colors">HUD EDITOR</button>
+                        <span>FABRIC 26.3 · CLIENT 0.3.7</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="text-emerald-400 flex items-center gap-1"><i class="fa-solid fa-bolt"></i> 100% Mod-Power</span>
+                        <span class="px-3 py-1.5 rounded bg-white/10 text-white text-xs border border-white/10">SCHLIEßEN</span>
+                    </div>
+                </div>
+
+                <div class="absolute inset-0 bg-[radial-gradient(#9d4edd_1px,transparent_1px)] [background-size:16px_16px] opacity-10 pointer-events-none"></div>
+            </div>
+        </div>
+
+        <div class="mt-8 max-w-4xl mx-auto glass-panel p-3.5 rounded-xl border border-slateAccent/20 flex items-center justify-center gap-3 text-xs text-gray-400 text-center shadow-purple-glow-sm">
+            <i class="fa-solid fa-circle-info text-slateGlow text-sm"></i>
+            <span><strong>Hinweis:</strong> Sämtliche Visualisierungen & Ingame-Darstellungen im Web-Design können vom tatsächlichen Client leicht abweichen.</span>
+        </div>
+    </section>
+
+    <!-- SECTION 1: IN-GAME MODULES & HUD SETTINGS -->
+    <section id="modules" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slateAccent/10">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+            <div>
+                <span class="text-slateGlow font-mono text-xs uppercase tracking-widest font-semibold block mb-2">// In-Game Settings</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Anpassbare Client-Module</h2>
+            </div>
+            <p class="text-gray-400 text-sm max-w-md">
+                Stelle deine HUD-Elemente millimetergenau ein. Aktiviere Module live in unserem interaktiven Client-Nachbau:
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div class="lg:col-span-7 glass-panel p-6 rounded-2xl space-y-4 shadow-purple-glow-sm">
+                <div class="flex items-center justify-between pb-3 border-b border-white/10">
+                    <div class="flex items-center gap-3">
+                        <span class="px-3 py-1 rounded bg-slateAccent/30 text-slateGlow text-xs font-mono font-bold">9 / 8 MODULE</span>
+                        <span class="text-sm font-bold text-white">Slate Settings Menu</span>
+                    </div>
+                    <div class="text-xs text-gray-400 font-mono">Suchen...</div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="p-4 rounded-xl bg-slateBg/70 border border-white/10 hover:border-slateAccent/40 transition-all">
+                        <div class="flex items-start justify-between mb-2">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-compass text-slateGlow"></i>
+                                <span class="font-bold text-sm text-white">Koordinaten</span>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="toggle-coords" class="sr-only peer" checked onchange="updateClientHudPreview()">
+                                <div class="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-slateAccent"></div>
+                            </label>
+                        </div>
+                        <p class="text-xs text-gray-400">XYZ, Biom & Blickrichtung im Client HUD</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slateBg/70 border border-white/10 hover:border-slateAccent/40 transition-all">
+                        <div class="flex items-start justify-between mb-2">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-gauge-high text-blue-400"></i>
+                                <span class="font-bold text-sm text-white">FPS Anzeige</span>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="toggle-fps" class="sr-only peer" checked onchange="updateClientHudPreview()">
+                                <div class="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-slateAccent"></div>
+                            </label>
+                        </div>
+                        <p class="text-xs text-gray-400">Live FPS-Counter mit minimaler Latenz</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slateBg/70 border border-white/10 hover:border-slateAccent/40 transition-all">
+                        <div class="flex items-start justify-between mb-2">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-shield text-purple-400"></i>
+                                <span class="font-bold text-sm text-white">Rüstung</span>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="toggle-armor" class="sr-only peer" checked onchange="updateClientHudPreview()">
+                                <div class="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-slateAccent"></div>
+                            </label>
+                        </div>
+                        <p class="text-xs text-gray-400">Haltbarkeitsstatus der getragenen Rüstung</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slateBg/70 border border-white/10 hover:border-slateAccent/40 transition-all">
+                        <div class="flex items-start justify-between mb-2">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-network-wired text-emerald-400"></i>
+                                <span class="font-bold text-sm text-white">Verbindungsstatus</span>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="toggle-ping" class="sr-only peer" checked onchange="updateClientHudPreview()">
+                                <div class="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-slateAccent"></div>
+                            </label>
+                        </div>
+                        <p class="text-xs text-gray-400">Ping & Server-Latenz in Echtzeit</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slateBg/70 border border-white/10 hover:border-slateAccent/40 transition-all">
+                        <div class="flex items-start justify-between mb-2">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-mountain text-slateGlow"></i>
+                                <span class="font-bold text-sm text-white">Slate Badge</span>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="toggle-badge" class="sr-only peer" checked onchange="updateClientHudPreview()">
+                                <div class="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-slateAccent"></div>
+                            </label>
+                        </div>
+                        <p class="text-xs text-gray-400">Client-Wasserzeichen im HUD</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slateBg/70 border border-white/10 hover:border-slateAccent/40 transition-all">
+                        <div class="flex items-start justify-between mb-2">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-desktop text-amber-400"></i>
+                                <span class="font-bold text-sm text-white">Custom Title Screen</span>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="toggle-titlescreen" class="sr-only peer" checked onchange="updateClientHudPreview()">
+                                <div class="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-slateAccent"></div>
+                            </label>
+                        </div>
+                        <p class="text-xs text-gray-400">Slate-Startbildschirm Modus</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-5 h-full">
+                <div class="hud-window rounded-2xl p-6 h-full flex flex-col justify-between border border-slateAccent/30 relative">
+                    <div class="text-xs font-mono text-gray-400 uppercase tracking-widest mb-4 flex justify-between items-center">
+                        <span>LIVE HUD DISPLAY VORSCHAU</span>
+                        <span class="text-emerald-400 text-[10px]"><i class="fa-solid fa-circle text-[8px] mr-1"></i>SYNCHRONISIERT</span>
+                    </div>
+
+                    <div class="space-y-4 font-mono my-auto py-6">
+                        <div id="hud-render-coords" class="p-3 rounded-lg bg-black/50 border border-white/10 transition-all duration-300">
+                            <span class="text-gray-400 text-xs">XYZ:</span> <span class="text-blue-300 text-sm font-bold">-2763 / 128 / -1831</span>
+                            <div class="text-[11px] text-gray-500">Biom: Plains (Blickrichtung: West)</div>
+                        </div>
+
+                        <div class="flex gap-3">
+                            <div id="hud-render-fps" class="flex-1 p-3 rounded-lg bg-black/50 border border-white/10 transition-all duration-300">
+                                <div class="text-gray-400 text-xs">FPS</div>
+                                <div class="text-blue-400 text-xl font-bold">211 FPS</div>
+                            </div>
+                            <div id="hud-render-ping" class="flex-1 p-3 rounded-lg bg-black/50 border border-white/10 transition-all duration-300">
+                                <div class="text-gray-400 text-xs">PING</div>
+                                <div class="text-emerald-400 text-xl font-bold">38 ms</div>
+                            </div>
+                        </div>
+
+                        <div id="hud-render-armor" class="p-3 rounded-lg bg-black/50 border border-white/10 transition-all duration-300 flex items-center gap-3">
+                            <i class="fa-solid fa-shield-halved text-purple-400 text-xl"></i>
+                            <div class="text-xs">
+                                <div class="text-white font-bold">Diamond Armor Set</div>
+                                <div class="text-gray-400">Haltbarkeit: 98% (521/528)</div>
+                            </div>
+                        </div>
+
+                        <div id="hud-render-badge" class="p-3 rounded-lg bg-gradient-to-r from-slateAccent/30 to-transparent border border-slateAccent/40 flex items-center justify-between transition-all duration-300">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 fill-current text-slateGlow" viewBox="0 0 24 24"><path d="M12 3L2 19h20L12 3z"/></svg>
+                                <span class="text-xs font-bold text-white tracking-widest">SLATE CLIENT 26.3</span>
+                            </div>
+                            <span class="text-[10px] text-slateGlow font-mono">CLIENT 0.3.7</span>
+                        </div>
+                    </div>
+
+                    <div class="text-[10px] text-gray-500 text-center font-mono pt-4 border-t border-white/10">
+                        * Schalte links Module um, um die Live-Reaktion im Overlay zu sehen.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: COSMETICS -->
+    <section id="cosmetics" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slateAccent/10">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+            <span class="text-slateGlow font-mono text-xs uppercase tracking-widest font-semibold block mb-2">// Ingame Cosmetics Engine</span>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Ankleidezimmer & Shop</h2>
+            <p class="text-gray-400 text-sm mt-2">
+                Exklusive Capes, 3D-Wings und Auren, die direkt im Spiel für alle Slate-Nutzer gerendert werden.
+            </p>
+        </div>
+
+        <div class="hud-window rounded-2xl p-6 shadow-purple-glow">
+            <div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-white/10">
+                <div class="flex items-center gap-3">
+                    <button id="cosmetic-tab-wardrobe" onclick="switchCosmeticTab('wardrobe')" class="px-5 py-2 rounded-xl font-semibold text-sm bg-slateAccent text-white shadow-purple-glow-sm transition-all">Ankleidezimmer</button>
+                    <button id="cosmetic-tab-shop" onclick="switchCosmeticTab('shop')" class="px-5 py-2 rounded-xl font-semibold text-sm bg-white/5 hover:bg-white/10 text-gray-300 transition-all">Shop</button>
+                </div>
+                <div class="glass-panel px-4 py-2 rounded-xl flex items-center gap-2 border border-amber-500/30">
+                    <i class="fa-solid fa-coins text-amber-400 text-lg"></i>
+                    <span class="text-xs font-mono text-gray-300 uppercase">Guthaben:</span>
+                    <span class="text-sm font-bold font-mono text-amber-300">9880 COINS</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
+                <div class="lg:col-span-4 glass-panel p-5 rounded-xl border border-white/10 flex flex-col items-center justify-between min-h-[320px]">
+                    <div class="text-xs font-mono text-gray-400 uppercase w-full flex justify-between">
+                        <span>VORSCHAU</span>
+                        <span id="preview-item-name" class="text-slateGlow font-bold">Moonlight Trail</span>
+                    </div>
+
+                    <div class="my-6 text-center">
+                        <div class="relative w-28 h-44 mx-auto rounded-xl bg-gradient-to-b from-purple-900/40 to-slateBg flex flex-col items-center justify-center border border-slateAccent/30 shadow-purple-glow-sm group">
+                            <div class="w-12 h-12 rounded bg-amber-800/80 border border-amber-600 mb-1 flex items-center justify-center text-xs font-bold text-amber-200">
+                                Skin
+                            </div>
+                            <div class="w-16 h-20 rounded bg-slate-800 border border-slate-600 flex items-center justify-center relative">
+                                <div id="active-cape-display" class="absolute inset-x-1 inset-y-1 bg-gradient-to-b from-slateAccent to-purple-900 rounded text-[9px] text-white flex items-center justify-center font-bold font-mono border border-slateGlow">
+                                    CAPE
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full space-y-2">
+                        <button onclick="unequipCape()" class="w-full py-2 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-semibold text-gray-300 transition-colors border border-white/10">CAPE ABLEGEN</button>
+                        <button onclick="refreshShop()" class="w-full py-2 rounded-lg bg-slateAccent/20 hover:bg-slateAccent/30 text-xs font-semibold text-slateGlow transition-colors border border-slateAccent/30">Shop aktualisieren</button>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[360px] overflow-y-auto custom-scrollbar pr-2">
+                    <div class="glass-panel p-4 rounded-xl border border-white/10 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded bg-blue-900/40 border border-blue-500/40 flex items-center justify-center text-blue-300 font-bold text-xs">R</div>
+                            <div>
+                                <div class="text-sm font-bold text-white">Migrator</div>
+                                <div class="text-[11px] text-gray-400">Cape · Ingame Spind</div>
+                            </div>
+                        </div>
+                        <button onclick="equipCosmetic('Migrator', 'MIGRATOR')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white/10 hover:bg-slateAccent text-white transition-all">AUSRÜSTEN</button>
+                    </div>
+
+                    <div class="glass-panel p-4 rounded-xl border border-slateAccent/40 flex items-center justify-between bg-slateAccent/10">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded bg-slateAccent/40 border border-slateGlow flex items-center justify-center text-slateGlow font-bold text-xs">R</div>
+                            <div>
+                                <div class="text-sm font-bold text-white">Moonlight Trail</div>
+                                <div class="text-[11px] text-gray-400">Cape · Ingame Spind</div>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">AUSGEWÄHLT</span>
+                    </div>
+
+                    <div class="glass-panel p-4 rounded-xl border border-white/10 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded bg-purple-900/40 border border-purple-500/40 flex items-center justify-center text-purple-300 font-bold text-xs">R</div>
+                            <div>
+                                <div class="text-sm font-bold text-white">Mojang Cape</div>
+                                <div class="text-[11px] text-gray-400">Cape · Ingame Spind</div>
+                            </div>
+                        </div>
+                        <button onclick="equipCosmetic('Mojang Cape', 'MOJANG')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white/10 hover:bg-slateAccent text-white transition-all">AUSRÜSTEN</button>
+                    </div>
+
+                    <div class="glass-panel p-4 rounded-xl border border-white/10 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded bg-purple-900/40 border border-purple-500/40 flex items-center justify-center text-purple-300 font-bold text-xs">R</div>
+                            <div>
+                                <div class="text-sm font-bold text-white">Twisted</div>
+                                <div class="text-[11px] text-gray-400">Cape · Ingame Spind</div>
+                            </div>
+                        </div>
+                        <button onclick="equipCosmetic('Twisted Cape', 'TWISTED')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white/10 hover:bg-slateAccent text-white transition-all">AUSRÜSTEN</button>
+                    </div>
+
+                    <div class="glass-panel p-4 rounded-xl border border-white/10 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded bg-purple-600/30 border border-purple-400 flex items-center justify-center text-purple-200 font-bold text-xs">W</div>
+                            <div>
+                                <div class="text-sm font-bold text-white">wingsclown</div>
+                                <div class="text-[11px] text-gray-400">3D-Wings · für Andere sichtbar</div>
+                            </div>
+                        </div>
+                        <button onclick="equipCosmetic('wingsclown 3D', 'WINGS')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white/10 hover:bg-slateAccent text-white transition-all">AUSRÜSTEN</button>
+                    </div>
+
+                    <div class="glass-panel p-4 rounded-xl border border-white/10 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded bg-amber-500/20 border border-amber-400 flex items-center justify-center text-amber-300 font-bold text-xs">✨</div>
+                            <div>
+                                <div class="text-sm font-bold text-white">Kristall-Halo</div>
+                                <div class="text-[11px] text-gray-400">Leuchtender Heiligenschein</div>
+                            </div>
+                        </div>
+                        <button onclick="equipCosmetic('Kristall-Halo', 'HALO')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white/10 hover:bg-slateAccent text-white transition-all">AUSRÜSTEN</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: SKIN MANAGER -->
+    <section id="skins" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slateAccent/10">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+            <span class="text-slateGlow font-mono text-xs uppercase tracking-widest font-semibold block mb-2">// Dynamic Skin Switcher</span>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-white">In-Game Skin Manager</h2>
+            <p class="text-gray-400 text-sm mt-2">
+                Wechsle deine Skins direkt im Spiel ohne Neustart. Verwalte lokale Dateien oder importiere per NameMC.
+            </p>
+        </div>
+
+        <div class="hud-window rounded-2xl p-6 shadow-purple-glow">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="glass-panel p-4 rounded-xl border border-slateAccent/40 bg-slateAccent/10 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-amber-800/80 border border-amber-500 flex items-center justify-center font-bold text-amber-200">ans</div>
+                    <div>
+                        <div class="text-sm font-bold text-white">ansgorSW</div>
+                        <div class="text-xs text-slateGlow font-mono">AKTIV (Account-Skin)</div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-4 rounded-xl border border-white/10 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-purple-900/80 border border-purple-500 flex items-center justify-center font-bold text-purple-200">Slo</div>
+                    <div>
+                        <div class="text-sm font-bold text-white">SloshyMC</div>
+                        <div class="text-xs text-gray-400 font-mono">Gespeichert</div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-4 rounded-xl border border-dashed border-slateAccent/40 flex items-center justify-center gap-2 cursor-pointer hover:bg-slateAccent/10 transition-all">
+                    <i class="fa-solid fa-plus text-slateGlow"></i>
+                    <span class="text-xs font-bold text-white">Skin hinzufügen</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: BADGES & CUSTOM ICONS -->
+    <section id="icons" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slateAccent/10">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+            <span class="text-slateGlow font-mono text-xs uppercase tracking-widest font-semibold block mb-2">// Custom Client Badges</span>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Ränge, Badges & Custom Icons</h2>
+            <p class="text-gray-400 text-sm mt-2">
+                Zeige deinen Rang direkt im Chat & über dem Spielernamen für alle Slate-Spieler an.
+            </p>
+        </div>
+
+        <div class="hud-window rounded-2xl p-6 shadow-purple-glow">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+                <button onclick="selectIcon('admin.png', 'ADMIN')" class="p-3 rounded-xl glass-panel border border-slateAccent/40 hover:border-slateGlow text-center transition-all bg-slateAccent/10">
+                    <div class="text-lg text-red-400 mb-1">▲</div>
+                    <div class="text-xs font-bold text-white">admin.png</div>
+                </button>
+                <button onclick="selectIcon('basti.png', 'BASTI')" class="p-3 rounded-xl glass-panel border border-white/10 hover:border-slateGlow text-center transition-all">
+                    <div class="text-lg text-amber-400 mb-1">🔥</div>
+                    <div class="text-xs font-bold text-white">basti.png</div>
+                </button>
+                <button onclick="selectIcon('ghg.png', 'GHG')" class="p-3 rounded-xl glass-panel border border-white/10 hover:border-slateGlow text-center transition-all">
+                    <div class="text-lg text-pink-400 mb-1">💎</div>
+                    <div class="text-xs font-bold text-white">ghg.png</div>
+                </button>
+                <button onclick="selectIcon('a33-condor.png', 'CONDOR')" class="p-3 rounded-xl glass-panel border border-white/10 hover:border-slateGlow text-center transition-all">
+                    <div class="text-lg text-blue-400 mb-1">✈️</div>
+                    <div class="text-xs font-bold text-white">a33-condor</div>
+                </button>
+                <button onclick="selectIcon('bastian.png', 'BASTIAN')" class="p-3 rounded-xl glass-panel border border-white/10 hover:border-slateGlow text-center transition-all">
+                    <div class="text-lg text-purple-400 mb-1">⚡</div>
+                    <div class="text-xs font-bold text-white">bastian.png</div>
+                </button>
+                <button onclick="selectIcon('standard.png', 'STANDARD')" class="p-3 rounded-xl glass-panel border border-white/10 hover:border-slateGlow text-center transition-all">
+                    <div class="text-lg text-gray-400 mb-1">◆</div>
+                    <div class="text-xs font-bold text-white">standard</div>
+                </button>
+            </div>
+
+            <div class="mt-4 p-3 rounded-xl glass-panel border border-white/10 flex items-center justify-between text-xs">
+                <span class="text-gray-400 font-mono">Ausgewähltes Icon: <strong id="selected-icon-preview-name" class="text-slateGlow">admin.png</strong></span>
+                <div class="flex items-center gap-2">
+                    <span id="chat-badge-icon" class="w-4 h-4 rounded bg-red-500 inline-flex items-center justify-center text-[10px] text-white">▲</span>
+                    <span class="font-bold text-white">ansgorSW</span>
+                    <span class="text-gray-400">: Hallo Slate Client!</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: EMOTES -->
+    <section id="emotes" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slateAccent/10">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+            <div>
+                <span class="text-slateGlow font-mono text-xs uppercase tracking-widest font-semibold block mb-2">// Ingame Radial Menu</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Interaktives Emote Wheel</h2>
+            </div>
+            <p class="text-gray-400 text-sm max-w-md">
+                Drücke im Spiel deine Emote-Taste für das kreisförmige Schnellwahl-Rad. Teste das Emote Wheel durch Anstatten der Slots:
+            </p>
+        </div>
+
+        <div class="hud-window rounded-2xl p-8 shadow-purple-glow flex flex-col items-center justify-center relative min-h-[440px]">
+            <div class="relative w-72 h-72 sm:w-80 sm:h-80 rounded-full border border-slateAccent/40 bg-slateBg/90 shadow-purple-glow flex items-center justify-center p-4">
+                <div class="w-24 h-24 rounded-full glass-panel border border-slateGlow flex flex-col items-center justify-center text-center z-20 shadow-purple-glow-sm">
+                    <div id="wheel-emote-icon" class="text-2xl animate-bounce">🖐️</div>
+                    <div id="wheel-emote-title" class="text-[10px] font-bold text-white uppercase font-mono mt-0.5">Winken</div>
+                </div>
+
+                <button onclick="activateWheelEmote('Winken', '🖐️', 'Taste [B]')" class="absolute top-2 left-1/2 -translate-x-1/2 p-3 rounded-full glass-panel hover:bg-slateAccent text-white border border-slateAccent/40 hover:scale-110 transition-all group" title="Winken">
+                    <span class="text-xl group-hover:scale-125 transition-transform block">🖐️</span>
+                </button>
+                <button onclick="activateWheelEmote('Dab', '😎', 'Taste [N]')" class="absolute top-10 right-8 p-3 rounded-full glass-panel hover:bg-slateAccent text-white border border-slateAccent/40 hover:scale-110 transition-all group" title="Dab">
+                    <span class="text-xl group-hover:scale-125 transition-transform block">😎</span>
+                </button>
+                <button onclick="activateWheelEmote('GG Salut', '🫡', 'Taste [M]')" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full glass-panel hover:bg-slateAccent text-white border border-slateAccent/40 hover:scale-110 transition-all group" title="GG Salut">
+                    <span class="text-xl group-hover:scale-125 transition-transform block">🫡</span>
+                </button>
+                <button onclick="activateWheelEmote('Dance Party', '💃', 'Taste [H]')" class="absolute bottom-10 right-8 p-3 rounded-full glass-panel hover:bg-slateAccent text-white border border-slateAccent/40 hover:scale-110 transition-all group" title="Dance Party">
+                    <span class="text-xl group-hover:scale-125 transition-transform block">💃</span>
+                </button>
+                <button onclick="activateWheelEmote('Rage Fire', '🔥', 'Taste [J]')" class="absolute bottom-2 left-1/2 -translate-x-1/2 p-3 rounded-full glass-panel hover:bg-slateAccent text-white border border-slateAccent/40 hover:scale-110 transition-all group" title="Rage Fire">
+                    <span class="text-xl group-hover:scale-125 transition-transform block">🔥</span>
+                </button>
+                <button onclick="activateWheelEmote('Hyped', '🎉', 'Taste [K]')" class="absolute bottom-10 left-8 p-3 rounded-full glass-panel hover:bg-slateAccent text-white border border-slateAccent/40 hover:scale-110 transition-all group" title="Hyped">
+                    <span class="text-xl group-hover:scale-125 transition-transform block">🎉</span>
+                </button>
+                <button onclick="activateWheelEmote('Victory Flex', '💪', 'Taste [L]')" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full glass-panel hover:bg-slateAccent text-white border border-slateAccent/40 hover:scale-110 transition-all group" title="Victory Flex">
+                    <span class="text-xl group-hover:scale-125 transition-transform block">💪</span>
+                </button>
+                <button onclick="activateWheelEmote('Lachen', '😂', 'Taste [U]')" class="absolute top-10 left-8 p-3 rounded-full glass-panel hover:bg-slateAccent text-white border border-slateAccent/40 hover:scale-110 transition-all group" title="Lachen">
+                    <span class="text-xl group-hover:scale-125 transition-transform block">😂</span>
+                </button>
+            </div>
+
+            <div class="mt-6 text-center">
+                <span class="text-xs text-gray-400 font-mono">Hot-Key Belegung: <strong id="wheel-key-text" class="text-slateGlow">Taste [B]</strong></span>
+                <p class="text-[11px] text-gray-500 mt-1">Im Spiel öffnet das Gedrückthalten von [B] dieses flüssige 3D-Wheel.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6: FRIENDS -->
+    <section id="friends" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slateAccent/10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div class="lg:col-span-5 space-y-6">
+                <span class="text-slateGlow font-mono text-xs uppercase tracking-widest font-semibold block">// Integrated Social Network</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Echtzeit-Freundessystem</h2>
+                <p class="text-gray-300 text-sm leading-relaxed">
+                    Sieh sofort, wer deiner Freunde online ist, tritt ihren Servern per Klick bei oder lade sie in deine Party ein.
+                </p>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3 p-3.5 rounded-xl glass-panel border border-white/10">
+                        <i class="fa-solid fa-gamepad text-emerald-400 text-lg"></i>
+                        <div>
+                            <div class="text-xs font-bold text-white">Direct Join & Lobby Invite</div>
+                            <div class="text-[10px] text-gray-400">Trete dem Server deiner Freunde mit einem Klick bei.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-7">
+                <div class="hud-window rounded-2xl p-6 shadow-purple-glow">
+                    <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-white/10 mb-4">
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm font-bold text-white">FREUNDE UND STATUS</span>
+                            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-mono border border-emerald-500/40">ONLINE (3/4)</span>
+                        </div>
+                        <button onclick="alert('Freundes-Suchfenster geöffnet')" class="px-3 py-1.5 rounded-xl bg-slateAccent hover:bg-slateGlow text-xs font-semibold text-white transition-all shadow-purple-glow-sm">
+                            <i class="fa-solid fa-user-plus mr-1"></i> Freund hinzufügen
+                        </button>
+                    </div>
+
+                    <div class="space-y-2.5 max-h-[320px] overflow-y-auto custom-scrollbar pr-1">
+                        <div class="glass-panel p-3 rounded-xl border border-white/10 flex items-center justify-between bg-white/5">
+                            <div class="flex items-center gap-3">
+                                <div class="relative">
+                                    <div class="w-10 h-10 rounded-lg bg-amber-800/80 border border-amber-600 flex items-center justify-center text-xs font-bold text-amber-200">ans</div>
+                                    <span class="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-slateBg rounded-full"></span>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-white flex items-center gap-2">
+                                        <span>ansgorSW</span>
+                                        <span class="text-[9px] px-1.5 py-0.2 rounded bg-red-500/20 text-red-300 font-mono">ADMIN</span>
+                                    </div>
+                                    <div class="text-[10px] text-emerald-400 font-mono">Spielt auf GommeHD.net (BedWars)</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="alert('Server-Beitritt zu GommeHD.net...')" class="px-2.5 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500/40 text-emerald-300 text-[11px] font-bold border border-emerald-500/30 transition-all">Beitreten</button>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel p-3 rounded-xl border border-white/10 flex items-center justify-between bg-white/5">
+                            <div class="flex items-center gap-3">
+                                <div class="relative">
+                                    <div class="w-10 h-10 rounded-lg bg-purple-900/80 border border-purple-600 flex items-center justify-center text-xs font-bold text-purple-200">Slo</div>
+                                    <span class="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-slateBg rounded-full"></span>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-white">SloshyMC</div>
+                                    <div class="text-[10px] text-emerald-400 font-mono">Spielt auf Hypixel.net (SkyWars)</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="alert('Server-Beitritt zu Hypixel.net...')" class="px-2.5 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500/40 text-emerald-300 text-[11px] font-bold border border-emerald-500/30 transition-all">Beitreten</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 7: MULTI-INSTANCE -->
+    <section id="multi-instance" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slateAccent/10">
+        <div class="hud-window rounded-3xl p-8 sm:p-12 relative overflow-hidden border border-slateAccent/40 shadow-purple-glow">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div class="lg:col-span-6 space-y-6">
+                    <span class="px-3 py-1 rounded-full bg-slateAccent/30 text-slateGlow text-xs font-mono font-bold uppercase border border-slateAccent/50">Exklusives Feature</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white leading-tight">Multi-Instance Instant Server Jump</h2>
+                    <p class="text-gray-300 text-sm leading-relaxed">
+                        Verbinde dich in einer einzigen Client-Instanz gleichzeitig mit mehreren Minecraft-Servern. Wechsel per Tastenkombination (<kbd class="px-2 py-0.5 rounded bg-slate-800 border border-slate-600 font-mono text-slateGlow text-xs">Strg + Tab</kbd>) ohne Nachladezeiten oder Performance-Verlust.
+                    </p>
+                </div>
+
+                <div class="lg:col-span-6">
+                    <div class="glass-panel p-6 rounded-2xl border border-slateAccent/40 space-y-4">
+                        <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                            <span class="text-xs font-bold text-white font-mono">AKTIVE SERVER-INSTANZEN</span>
+                            <span class="text-[10px] text-slateGlow font-mono">HOTKEY: CTRL + TAB</span>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div id="inst-1" class="p-3.5 rounded-xl border border-slateGlow bg-slateAccent/20 flex items-center justify-between transition-all">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></div>
+                                    <div>
+                                        <div class="text-xs font-bold text-white">GommeHD.net</div>
+                                        <div class="text-[10px] text-gray-300 font-mono">BedWars 4x2 · Ping: 24 ms</div>
+                                    </div>
+                                </div>
+                                <span class="px-2.5 py-1 rounded bg-slateAccent text-white text-[10px] font-bold font-mono">AKTIV</span>
+                            </div>
+
+                            <div id="inst-2" class="p-3.5 rounded-xl border border-white/10 bg-slateBg/60 flex items-center justify-between hover:border-slateAccent/40 transition-all">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-2.5 h-2.5 rounded-full bg-emerald-400"></div>
+                                    <div>
+                                        <div class="text-xs font-bold text-white">Hypixel.net</div>
+                                        <div class="text-[10px] text-gray-400 font-mono">SkyWars Lobby · Ping: 38 ms</div>
+                                    </div>
+                                </div>
+                                <button onclick="switchInstance(2)" class="px-2.5 py-1 rounded bg-white/10 hover:bg-slateAccent text-white text-[10px] font-bold font-mono transition-all">WECHSELN</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 8: ÜBER UNS -->
+    <section id="about" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slateAccent/10">
+        <div class="glass-panel p-8 rounded-3xl border border-slateAccent/30 text-center max-w-3xl mx-auto">
+            <h2 class="text-3xl font-extrabold text-white mb-4">Über den Slate Client</h2>
+            <p class="text-gray-300 text-sm leading-relaxed mb-6">
+                Slate ist ein maßgeschneiderter Minecraft-Client auf Fabric-Basis für Version 26.3. Unser Ziel ist es, maximale FPS mit einem aufgeräumten, modern gestalteten HUD zu kombinieren. 
+            </p>
+            <div class="flex justify-center gap-4 text-xs font-mono text-slateGlow">
+                <span>Fabric 26.3</span> • <span>Custom Capes</span> • <span>Realtime Cosmetics</span>
+            </div>
+        </div>
     </section>
 
     <!-- FOOTER -->
-    <footer class="py-8 text-center text-xs text-gray-500 border-t border-slateAccent/10">
-        <button onclick="triggerAdminModal()" class="hover:text-slateGlow"><i class="fa-solid fa-lock mr-1"></i>Admin</button>
+    <footer class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slateAccent/10 text-center text-xs text-gray-500">
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+            <div class="flex items-center gap-2 text-white font-bold tracking-widest font-mono">
+                <svg class="w-4 h-4 fill-current text-slateGlow" viewBox="0 0 24 24"><path d="M12 3L2 19h20L12 3z"/></svg>
+                SLATE CLIENT
+            </div>
+            <div class="flex items-center gap-6">
+                <button onclick="openModal('impressum-modal')" class="hover:text-slateGlow transition-colors">Impressum & Datenschutz</button>
+                <button onclick="triggerAdminModal()" class="hover:text-slateGlow transition-colors text-slateGlow/60"><i class="fa-solid fa-lock text-[10px] mr-1"></i>Admin</button>
+            </div>
+        </div>
+        <p>© 2026 Slate Client. Minecraft is a trademark of Mojang Synergies AB. Slate is not affiliated with Mojang.</p>
     </footer>
 
     <!-- DOWNLOAD MODAL -->
     <div id="download-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
         <div class="hud-window rounded-2xl max-w-md w-full p-6 relative border border-slateAccent/40 shadow-purple-glow">
-            <button onclick="closeModal('download-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <button onclick="closeModal('download-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
             <div class="text-center mb-6">
+                <div class="w-12 h-12 rounded-2xl bg-slateAccent/20 border border-slateAccent/40 flex items-center justify-center text-slateGlow mx-auto mb-3 shadow-purple-glow-sm">
+                    <i class="fa-solid fa-download text-xl"></i>
+                </div>
                 <h3 class="text-xl font-extrabold text-white">Slate Launcher herunterladen</h3>
-                <p class="text-xs text-gray-400 mt-1">Wähle dein Betriebssystem aus</p>
+                <p class="text-xs text-gray-400 mt-1">Wähle dein Betriebssystem aus (Fabric 26.3 Compatible)</p>
             </div>
 
             <div class="space-y-3">
-                <!-- Windows Option: Zeigt nun cleanen Namen statt Link -->
+                <!-- Windows Option: Zeigt nun den konfigurierten Namen statt der Roh-URL -->
                 <a id="download-windows-btn" href="#" download class="p-4 rounded-xl glass-panel border border-slateAccent/40 hover:border-slateGlow flex items-center justify-between group transition-all bg-slateAccent/10">
                     <div class="flex items-center gap-3">
-                        <i class="fa-brands fa-windows text-2xl text-blue-400"></i>
+                        <i class="fa-brands fa-windows text-2xl text-blue-400 group-hover:scale-110 transition-transform"></i>
                         <div class="text-left">
                             <div class="text-sm font-bold text-white flex items-center gap-2">
                                 <span>Windows</span>
@@ -98,15 +850,19 @@
                             <div class="text-[11px] text-slateGlow font-mono mt-0.5" id="windows-name-display">Slate-Launcher-Installer.exe</div>
                         </div>
                     </div>
-                    <i class="fa-solid fa-arrow-down-long text-slateGlow"></i>
+                    <i class="fa-solid fa-arrow-down-long text-slateGlow group-hover:translate-y-1 transition-transform"></i>
                 </a>
 
+                <!-- Linux Option (Ausgegraut) -->
                 <div class="p-4 rounded-xl glass-panel border border-white/5 opacity-50 flex items-center justify-between cursor-not-allowed">
                     <div class="flex items-center gap-3">
                         <i class="fa-brands fa-linux text-2xl text-gray-400"></i>
                         <div class="text-left">
-                            <div class="text-sm font-bold text-gray-300">Linux</div>
-                            <div class="text-[11px] text-gray-500 font-mono">Demnächst verfügbar</div>
+                            <div class="text-sm font-bold text-gray-300 flex items-center gap-2">
+                                <span>Linux</span>
+                                <span class="px-2 py-0.2 rounded bg-purple-500/20 text-purple-300 text-[10px] font-mono">KOMMT BALD</span>
+                            </div>
+                            <div class="text-[11px] text-gray-500 font-mono">Ausgegraut / Demnächst</div>
                         </div>
                     </div>
                     <i class="fa-solid fa-lock text-gray-500 text-sm"></i>
@@ -117,83 +873,313 @@
 
     <!-- SECRET ADMIN LOGIN MODAL -->
     <div id="admin-login-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
-        <div class="hud-window rounded-2xl max-w-sm w-full p-6 relative border border-slateAccent/40">
-            <button onclick="closeModal('admin-login-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-lg font-bold text-white mb-2">Admin Login</h3>
+        <div class="hud-window rounded-2xl max-w-sm w-full p-6 relative border border-slateAccent/40 shadow-purple-glow">
+            <button onclick="closeModal('admin-login-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="text-center mb-5">
+                <div class="w-10 h-10 rounded-xl bg-red-500/20 border border-red-500/40 flex items-center justify-center text-red-400 mx-auto mb-2">
+                    <i class="fa-solid fa-user-shield text-lg"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white">Admin Authentifizierung</h3>
+                <p class="text-xs text-gray-400">Gib das Passwort ein (Standard: GHG)</p>
+            </div>
+
             <form onsubmit="submitAdminLogin(event)" class="space-y-4">
-                <input type="password" id="admin-pw-input" placeholder="Passwort (Standard: GHG)" class="w-full px-3 py-2 rounded-xl bg-slateBg border border-slateAccent/30 text-white text-sm outline-none font-mono">
-                <button type="submit" class="w-full py-2.5 rounded-xl bg-slateAccent text-white font-bold text-sm">Anmelden</button>
+                <div>
+                    <label class="block text-[11px] font-mono text-gray-400 mb-1">PASSWORT</label>
+                    <input type="password" id="admin-pw-input" placeholder="Passwort eingeben..." class="w-full px-3.5 py-2.5 rounded-xl bg-slateBg border border-slateAccent/35 focus:border-slateGlow text-white text-sm outline-none font-mono">
+                </div>
+                <div id="admin-login-error" class="text-red-400 text-xs hidden text-center font-mono">
+                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> Falsches Passwort!
+                </div>
+                <button type="submit" class="w-full py-2.5 rounded-xl bg-slateAccent hover:bg-slateGlow text-white font-bold text-sm shadow-purple-glow transition-all">
+                    Anmelden
+                </button>
             </form>
         </div>
     </div>
 
-    <!-- ADMIN PANEL MODAL -->
+    <!-- ADMIN DASHBOARD PANEL MODAL -->
     <div id="admin-panel-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
-        <div class="hud-window rounded-2xl max-w-lg w-full p-6 relative border border-slateGlow">
-            <button onclick="closeModal('admin-panel-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-lg font-bold text-white mb-4">Admin Control Center</h3>
+        <div class="hud-window rounded-2xl max-w-lg w-full p-6 relative border border-slateGlow shadow-purple-glow">
+            <button onclick="closeModal('admin-panel-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
             
+            <div class="flex items-center gap-3 pb-4 border-b border-white/10 mb-5">
+                <div class="w-9 h-9 rounded-xl bg-purple-600 flex items-center justify-center text-white">
+                    <i class="fa-solid fa-sliders"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-white">Slate Admin Control Center</h3>
+                    <p class="text-xs text-gray-400 font-mono">Verwalte Downloads & Admin-Passwort</p>
+                </div>
+            </div>
+
             <div class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-white mb-1">Download Link (URL)</label>
-                    <input type="text" id="admin-win-url" placeholder="https://..." class="w-full px-3.5 py-2 rounded-xl bg-slateBg border border-slateAccent/30 text-white text-xs font-mono outline-none">
+                    <label class="block text-xs font-bold text-white mb-1">Echter Download-Link (URL)</label>
+                    <input type="text" id="admin-win-url" placeholder="https://..." class="w-full px-3.5 py-2 rounded-xl bg-slateBg border border-slateAccent/30 text-white text-xs font-mono outline-none focus:border-slateGlow">
+                    <span class="text-[10px] text-gray-400">Ziel-URL für Google Drive oder deinen Server.</span>
                 </div>
+
                 <div>
-                    <label class="block text-xs font-bold text-white mb-1">Anzuzeigender Dateiname / Name</label>
-                    <input type="text" id="admin-win-name" placeholder="Slate-Launcher-Installer.exe" class="w-full px-3.5 py-2 rounded-xl bg-slateBg border border-slateAccent/30 text-white text-xs font-mono outline-none">
+                    <label class="block text-xs font-bold text-white mb-1">Anzuzeigender Dateiname</label>
+                    <input type="text" id="admin-win-name" placeholder="Slate-Launcher-Installer.exe" class="w-full px-3.5 py-2 rounded-xl bg-slateBg border border-slateAccent/30 text-white text-xs font-mono outline-none focus:border-slateGlow">
+                    <span class="text-[10px] text-gray-400">Dieser Name wird im Download-Fenster angezeigt.</span>
                 </div>
-                <button onclick="saveAdminSettings()" class="w-full py-2.5 rounded-xl bg-emerald-600 text-white font-bold text-xs">Speichern</button>
+
+                <div class="pt-3 border-t border-white/10">
+                    <label class="block text-xs font-bold text-white mb-1">Neues Admin-Passwort ändern</label>
+                    <input type="password" id="admin-new-pw" placeholder="Neues Passwort (aktuell: GHG)" class="w-full px-3.5 py-2 rounded-xl bg-slateBg border border-slateAccent/30 text-white text-xs font-mono outline-none focus:border-slateGlow">
+                </div>
+
+                <div class="flex items-center gap-3 pt-4 border-t border-white/10">
+                    <button onclick="saveAdminSettings()" class="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-all shadow-lg">
+                        <i class="fa-solid fa-floppy-disk mr-1"></i> Speichern & Übernehmen
+                    </button>
+                    <button onclick="resetAdminSettings()" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-gray-300 font-semibold text-xs transition-all">
+                        Zurücksetzen
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- IMPRESSUM MODAL -->
+    <div id="impressum-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+        <div class="hud-window rounded-2xl max-w-xl w-full p-6 relative border border-slateAccent/40 max-h-[85vh] overflow-y-auto custom-scrollbar">
+            <button onclick="closeModal('impressum-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <h3 class="text-xl font-bold text-white mb-4">Impressum & Legal Disclosure</h3>
+            <div class="space-y-4 text-xs text-gray-300 leading-relaxed font-sans">
+                <div>
+                    <strong class="text-white">Angaben gemäß § 5 TMG:</strong>
+                    <p>Slate Client Development Team</p>
+                    <p>Kontakt: Über Discord / GitHub</p>
+                </div>
+                <div>
+                    <strong class="text-white">Haftungsausschluss:</strong>
+                    <p>Minecraft ist eine eingetragene Marke von Mojang Synergies AB. Slate Client steht in keiner offiziellen Verbindung zu Mojang oder Microsoft.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
     <script>
         const DEFAULT_WIN_URL = "#";
         const DEFAULT_WIN_NAME = "Slate-Launcher-Installer.exe";
         const DEFAULT_ADMIN_PW = "GHG";
 
-        function getVal(key, def) { return localStorage.getItem(key) || def; }
+        function getAdminPassword() {
+            return localStorage.getItem('slate_admin_pw') || DEFAULT_ADMIN_PW;
+        }
+
+        function getWinDownloadUrl() {
+            return localStorage.getItem('slate_win_url') || DEFAULT_WIN_URL;
+        }
+
+        function getWinDownloadName() {
+            return localStorage.getItem('slate_win_name') || DEFAULT_WIN_NAME;
+        }
 
         function initDynamicLinks() {
-            document.getElementById('download-windows-btn').setAttribute('href', getVal('slate_win_url', DEFAULT_WIN_URL));
-            document.getElementById('windows-name-display').innerText = getVal('slate_win_name', DEFAULT_WIN_NAME);
-        }
-
-        let clicks = 0, timer = null;
-        function handleSlateTextClick(e) {
-            e.preventDefault();
-            clicks++;
-            if (clicks === 1) timer = setTimeout(() => { clicks = 0; }, 3000);
-            if (clicks >= 5) { clearTimeout(timer); clicks = 0; openModal('admin-login-modal'); }
-        }
-
-        function triggerAdminModal() { openModal('admin-login-modal'); }
-
-        function submitAdminLogin(e) {
-            e.preventDefault();
-            if (document.getElementById('admin-pw-input').value === getVal('slate_admin_pw', DEFAULT_ADMIN_PW)) {
-                closeModal('admin-login-modal');
-                document.getElementById('admin-win-url').value = getVal('slate_win_url', DEFAULT_WIN_URL);
-                document.getElementById('admin-win-name').value = getVal('slate_win_name', DEFAULT_WIN_NAME);
-                openModal('admin-panel-modal');
-            } else {
-                alert('Falsches Passwort!');
+            const winBtn = document.getElementById('download-windows-btn');
+            const winDisplay = document.getElementById('windows-name-display');
+            if (winBtn && winDisplay) {
+                winBtn.setAttribute('href', getWinDownloadUrl());
+                winDisplay.innerText = getWinDownloadName();
             }
         }
 
+        // Secret Click Handler: 5x Clicks on SLATE Logo in 3 seconds
+        let slateClickCount = 0;
+        let slateClickTimer = null;
+
+        function handleSlateTextClick(e) {
+            e.preventDefault();
+            slateClickCount++;
+
+            if (slateClickCount === 1) {
+                slateClickTimer = setTimeout(() => {
+                    slateClickCount = 0;
+                }, 3000);
+            }
+
+            if (slateClickCount >= 5) {
+                clearTimeout(slateClickTimer);
+                slateClickCount = 0;
+                triggerAdminModal();
+            }
+        }
+
+        function triggerAdminModal() {
+            document.getElementById('admin-pw-input').value = '';
+            document.getElementById('admin-login-error').classList.add('hidden');
+            openModal('admin-login-modal');
+        }
+
+        function submitAdminLogin(e) {
+            e.preventDefault();
+            const inputPw = document.getElementById('admin-pw-input').value;
+            const currentPw = getAdminPassword();
+
+            if (inputPw === currentPw) {
+                closeModal('admin-login-modal');
+                openAdminPanel();
+            } else {
+                document.getElementById('admin-login-error').classList.remove('hidden');
+            }
+        }
+
+        function openAdminPanel() {
+            document.getElementById('admin-win-url').value = getWinDownloadUrl();
+            document.getElementById('admin-win-name').value = getWinDownloadName();
+            document.getElementById('admin-new-pw').value = '';
+            openModal('admin-panel-modal');
+        }
+
         function saveAdminSettings() {
-            localStorage.setItem('slate_win_url', document.getElementById('admin-win-url').value.trim());
-            localStorage.setItem('slate_win_name', document.getElementById('admin-win-name').value.trim());
+            const winUrl = document.getElementById('admin-win-url').value.trim();
+            const winName = document.getElementById('admin-win-name').value.trim();
+            const newPw = document.getElementById('admin-new-pw').value.trim();
+
+            if (winUrl) localStorage.setItem('slate_win_url', winUrl);
+            if (winName) localStorage.setItem('slate_win_name', winName);
+            if (newPw) localStorage.setItem('slate_admin_pw', newPw);
+
             initDynamicLinks();
-            alert('Gespeichert!');
+            alert('Einstellungen erfolgreich gespeichert!');
             closeModal('admin-panel-modal');
         }
 
-        function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
-        function openModal(id) { const m = document.getElementById(id); m.classList.remove('hidden'); setTimeout(() => m.classList.remove('opacity-0'), 10); }
-        function closeModal(id) { const m = document.getElementById(id); m.classList.add('opacity-0'); setTimeout(() => m.classList.add('hidden'), 300); }
+        function resetAdminSettings() {
+            if (confirm('Möchtest du alle Admin-Einstellungen auf Standard zurücksetzen?')) {
+                localStorage.removeItem('slate_win_url');
+                localStorage.removeItem('slate_win_name');
+                localStorage.removeItem('slate_admin_pw');
+                initDynamicLinks();
+                alert('Einstellungen zurückgesetzt.');
+                closeModal('admin-panel-modal');
+            }
+        }
 
-        window.addEventListener('DOMContentLoaded', initDynamicLinks);
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('flex');
+        }
+
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); }, 10);
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.add('opacity-0');
+            setTimeout(() => { modal.classList.add('hidden'); }, 300);
+        }
+
+        function updateClientHudPreview() {
+            const coordsOn = document.getElementById('toggle-coords').checked;
+            const fpsOn = document.getElementById('toggle-fps').checked;
+            const pingOn = document.getElementById('toggle-ping').checked;
+            const armorOn = document.getElementById('toggle-armor').checked;
+            const badgeOn = document.getElementById('toggle-badge').checked;
+
+            document.getElementById('hud-render-coords').style.display = coordsOn ? 'block' : 'none';
+            document.getElementById('hud-render-fps').style.display = fpsOn ? 'block' : 'none';
+            document.getElementById('hud-render-ping').style.display = pingOn ? 'block' : 'none';
+            document.getElementById('hud-render-armor').style.display = armorOn ? 'flex' : 'none';
+            document.getElementById('hud-render-badge').style.display = badgeOn ? 'flex' : 'none';
+        }
+
+        function switchCosmeticTab(tab) {
+            const btnWardrobe = document.getElementById('cosmetic-tab-wardrobe');
+            const btnShop = document.getElementById('cosmetic-tab-shop');
+
+            if (tab === 'wardrobe') {
+                btnWardrobe.className = "px-5 py-2 rounded-xl font-semibold text-sm bg-slateAccent text-white shadow-purple-glow-sm transition-all";
+                btnShop.className = "px-5 py-2 rounded-xl font-semibold text-sm bg-white/5 hover:bg-white/10 text-gray-300 transition-all";
+            } else {
+                btnShop.className = "px-5 py-2 rounded-xl font-semibold text-sm bg-slateAccent text-white shadow-purple-glow-sm transition-all";
+                btnWardrobe.className = "px-5 py-2 rounded-xl font-semibold text-sm bg-white/5 hover:bg-white/10 text-gray-300 transition-all";
+            }
+        }
+
+        function equipCosmetic(name, tag) {
+            document.getElementById('preview-item-name').innerText = name;
+            document.getElementById('active-cape-display').innerText = tag;
+        }
+
+        function unequipCape() {
+            document.getElementById('preview-item-name').innerText = "Kein Cape";
+            document.getElementById('active-cape-display').innerText = "NONE";
+        }
+
+        function refreshShop() {
+            alert('Cosmetics-Spind & Guthaben aktualisiert!');
+        }
+
+        function selectIcon(filename, title) {
+            document.getElementById('selected-icon-preview-name').innerText = filename;
+            const chatBadge = document.getElementById('chat-badge-icon');
+            
+            if (filename.includes('admin')) {
+                chatBadge.className = "w-4 h-4 rounded bg-red-500 inline-flex items-center justify-center text-[10px] text-white";
+                chatBadge.innerText = "▲";
+            } else if (filename.includes('basti')) {
+                chatBadge.className = "w-4 h-4 rounded bg-amber-500 inline-flex items-center justify-center text-[10px] text-white";
+                chatBadge.innerText = "🔥";
+            } else if (filename.includes('ghg')) {
+                chatBadge.className = "w-4 h-4 rounded bg-pink-500 inline-flex items-center justify-center text-[10px] text-white";
+                chatBadge.innerText = "💎";
+            } else {
+                chatBadge.className = "w-4 h-4 rounded bg-purple-500 inline-flex items-center justify-center text-[10px] text-white";
+                chatBadge.innerText = "◆";
+            }
+        }
+
+        function activateWheelEmote(name, icon, key) {
+            document.getElementById('wheel-emote-icon').innerText = icon;
+            document.getElementById('wheel-emote-title').innerText = name;
+            document.getElementById('wheel-key-text').innerText = key;
+        }
+
+        function switchInstance(id) {
+            const inst1 = document.getElementById('inst-1');
+            const inst2 = document.getElementById('inst-2');
+
+            [inst1, inst2].forEach((inst, index) => {
+                if (index + 1 === id) {
+                    inst.className = "p-3.5 rounded-xl border border-slateGlow bg-slateAccent/20 flex items-center justify-between transition-all";
+                    inst.querySelector('button, span').outerHTML = '<span class="px-2.5 py-1 rounded bg-slateAccent text-white text-[10px] font-bold font-mono">AKTIV</span>';
+                } else {
+                    inst.className = "p-3.5 rounded-xl border border-white/10 bg-slateBg/60 flex items-center justify-between hover:border-slateAccent/40 transition-all";
+                    const actionBtn = inst.querySelector('button, span');
+                    if (actionBtn) {
+                        actionBtn.outerHTML = `<button onclick="switchInstance(${index + 1})" class="px-2.5 py-1 rounded bg-white/10 hover:bg-slateAccent text-white text-[10px] font-bold font-mono transition-all">WECHSELN</button>`;
+                    }
+                }
+            });
+        }
+
+        setInterval(() => {
+            const fpsElem = document.getElementById('hero-fps-display');
+            if (fpsElem) {
+                const randomFps = Math.floor(Math.random() * 25) + 210;
+                fpsElem.innerText = randomFps + " FPS";
+            }
+        }, 1500);
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initDynamicLinks();
+        });
     </script>
 </body>
 </html>
