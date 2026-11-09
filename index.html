@@ -255,7 +255,7 @@
 
         <div class="mt-8 max-w-4xl mx-auto glass-panel p-3.5 rounded-xl border border-slateAccent/20 flex items-center justify-center gap-3 text-xs text-gray-400 text-center shadow-purple-glow-sm">
             <i class="fa-solid fa-circle-info text-slateGlow text-sm"></i>
-            <span><strong>Hinweis:</strong> Sämtliche Visualisierungen & Ingame-Darstellungen im Web-Design können vom tatsächlichen Client leicht abweichen.</span>
+            <span><strong>Hinweis:</strong> Sämtliche Visualisierungen & Ingame-Darstellungen im Web-Design können vom tatsächlichen Client leicht abweichen[cite: 8].</span>
         </div>
     </section>
 
@@ -838,7 +838,7 @@
             </div>
 
             <div class="space-y-3">
-                <!-- Windows Option: Zeigt nun den konfigurierten Namen statt der Roh-URL -->
+                <!-- Normaler Windows Download Button -->
                 <a id="download-windows-btn" href="#" download class="p-4 rounded-xl glass-panel border border-slateAccent/40 hover:border-slateGlow flex items-center justify-between group transition-all bg-slateAccent/10">
                     <div class="flex items-center gap-3">
                         <i class="fa-brands fa-windows text-2xl text-blue-400 group-hover:scale-110 transition-transform"></i>
@@ -852,6 +852,23 @@
                     </div>
                     <i class="fa-solid fa-arrow-down-long text-slateGlow group-hover:translate-y-1 transition-transform"></i>
                 </a>
+
+                <!-- Pre-Release / Discord Tester Box (Sichtbar wenn Pre-Release Modus AN ist) -->
+                <div id="prerelease-box" class="p-4 rounded-xl glass-panel border border-amber-500/40 bg-amber-500/10 hidden">
+                    <div class="flex items-start gap-3 mb-3">
+                        <i class="fa-solid fa-flask text-amber-400 text-xl mt-0.5"></i>
+                        <div>
+                            <div class="text-xs font-bold text-white uppercase tracking-wider">Pre-Release Phase</div>
+                            <p class="text-[11px] text-gray-300 mt-0.5 leading-relaxed">
+                                Der Download ist vorerst nur über unseren Discord-Server mit einer Tester-Bewerbung verfügbar.
+                            </p>
+                        </div>
+                    </div>
+                    <a id="discord-tester-btn" href="#" target="_blank" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-md">
+                        <i class="fa-brands fa-discord text-base"></i>
+                        <span>Auf Discord als Tester bewerben</span>
+                    </a>
+                </div>
 
                 <!-- Linux Option (Ausgegraut) -->
                 <div class="p-4 rounded-xl glass-panel border border-white/5 opacity-50 flex items-center justify-between cursor-not-allowed">
@@ -902,7 +919,7 @@
 
     <!-- ADMIN DASHBOARD PANEL MODAL -->
     <div id="admin-panel-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
-        <div class="hud-window rounded-2xl max-w-lg w-full p-6 relative border border-slateGlow shadow-purple-glow">
+        <div class="hud-window rounded-2xl max-w-lg w-full p-6 relative border border-slateGlow shadow-purple-glow max-h-[90vh] overflow-y-auto custom-scrollbar">
             <button onclick="closeModal('admin-panel-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-white">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
@@ -913,23 +930,47 @@
                 </div>
                 <div>
                     <h3 class="text-lg font-bold text-white">Slate Admin Control Center</h3>
-                    <p class="text-xs text-gray-400 font-mono">Verwalte Downloads & Admin-Passwort</p>
+                    <p class="text-xs text-gray-400 font-mono">Verwalte Downloads, Pre-Release & Passwort</p>
                 </div>
             </div>
 
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-white mb-1">Echter Download-Link (URL)</label>
-                    <input type="text" id="admin-win-url" placeholder="https://..." class="w-full px-3.5 py-2 rounded-xl bg-slateBg border border-slateAccent/30 text-white text-xs font-mono outline-none focus:border-slateGlow">
-                    <span class="text-[10px] text-gray-400">Ziel-URL für Google Drive oder deinen Server.</span>
+            <div class="space-y-5">
+                <!-- Pre-Release Switch Toggle -->
+                <div class="p-4 rounded-xl glass-panel border border-slateAccent/40 bg-slateAccent/10 flex items-center justify-between">
+                    <div>
+                        <div class="text-xs font-bold text-white flex items-center gap-2">
+                            <span>Pre-Release Modus aktivieren</span>
+                            <span class="px-2 py-0.2 rounded bg-amber-500/20 text-amber-300 text-[10px] font-mono">TESTER</span>
+                        </div>
+                        <p class="text-[11px] text-gray-400 mt-0.5">Sperrt den Download & verweist auf Tester-Bewerbung.</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="admin-prerelease-toggle" class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-slateAccent"></div>
+                    </label>
                 </div>
 
+                <!-- Discord Link input -->
                 <div>
-                    <label class="block text-xs font-bold text-white mb-1">Anzuzeigender Dateiname</label>
-                    <input type="text" id="admin-win-name" placeholder="Slate-Launcher-Installer.exe" class="w-full px-3.5 py-2 rounded-xl bg-slateBg border border-slateAccent/30 text-white text-xs font-mono outline-none focus:border-slateGlow">
-                    <span class="text-[10px] text-gray-400">Dieser Name wird im Download-Fenster angezeigt.</span>
+                    <label class="block text-xs font-bold text-white mb-1">Discord Einladungs-Link</label>
+                    <input type="text" id="admin-discord-url" placeholder="https://discord.gg/deinlink" class="w-full px-3.5 py-2 rounded-xl bg-slateBg border border-slateAccent/30 text-white text-xs font-mono outline-none focus:border-slateGlow">
+                    <span class="text-[10px] text-gray-400">Link zum Discord für Tester-Bewerbungen.</span>
                 </div>
 
+                <!-- Windows Link & Name inputs -->
+                <div class="pt-2 border-t border-white/10 space-y-3">
+                    <div>
+                        <label class="block text-xs font-bold text-white mb-1">Echter Download-Link (URL)</label>
+                        <input type="text" id="admin-win-url" placeholder="https://..." class="w-full px-3.5 py-2 rounded-xl bg-slateBg border border-slateAccent/30 text-white text-xs font-mono outline-none focus:border-slateGlow">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-white mb-1">Anzuzeigender Dateiname</label>
+                        <input type="text" id="admin-win-name" placeholder="Slate-Launcher-Installer.exe" class="w-full px-3.5 py-2 rounded-xl bg-slateBg border border-slateAccent/30 text-white text-xs font-mono outline-none focus:border-slateGlow">
+                    </div>
+                </div>
+
+                <!-- Admin Password input -->
                 <div class="pt-3 border-t border-white/10">
                     <label class="block text-xs font-bold text-white mb-1">Neues Admin-Passwort ändern</label>
                     <input type="password" id="admin-new-pw" placeholder="Neues Passwort (aktuell: GHG)" class="w-full px-3.5 py-2 rounded-xl bg-slateBg border border-slateAccent/30 text-white text-xs font-mono outline-none focus:border-slateGlow">
@@ -972,7 +1013,9 @@
     <script>
         const DEFAULT_WIN_URL = "#";
         const DEFAULT_WIN_NAME = "Slate-Launcher-Installer.exe";
+        const DEFAULT_DISCORD_URL = "https://discord.gg";
         const DEFAULT_ADMIN_PW = "GHG";
+        const DEFAULT_PRERELEASE = "false";
 
         function getAdminPassword() {
             return localStorage.getItem('slate_admin_pw') || DEFAULT_ADMIN_PW;
@@ -986,12 +1029,36 @@
             return localStorage.getItem('slate_win_name') || DEFAULT_WIN_NAME;
         }
 
+        function getDiscordUrl() {
+            return localStorage.getItem('slate_discord_url') || DEFAULT_DISCORD_URL;
+        }
+
+        function isPreReleaseEnabled() {
+            return localStorage.getItem('slate_prerelease') === 'true';
+        }
+
         function initDynamicLinks() {
             const winBtn = document.getElementById('download-windows-btn');
             const winDisplay = document.getElementById('windows-name-display');
-            if (winBtn && winDisplay) {
-                winBtn.setAttribute('href', getWinDownloadUrl());
-                winDisplay.innerText = getWinDownloadName();
+            const prereleaseBox = document.getElementById('prerelease-box');
+            const discordBtn = document.getElementById('discord-tester-btn');
+
+            const prereleaseActive = isPreReleaseEnabled();
+
+            if (discordBtn) {
+                discordBtn.setAttribute('href', getDiscordUrl());
+            }
+
+            if (prereleaseActive) {
+                if (winBtn) winBtn.classList.add('hidden');
+                if (prereleaseBox) prereleaseBox.classList.remove('hidden');
+            } else {
+                if (winBtn) {
+                    winBtn.classList.remove('hidden');
+                    winBtn.setAttribute('href', getWinDownloadUrl());
+                }
+                if (winDisplay) winDisplay.innerText = getWinDownloadName();
+                if (prereleaseBox) prereleaseBox.classList.add('hidden');
             }
         }
 
@@ -1038,6 +1105,8 @@
         function openAdminPanel() {
             document.getElementById('admin-win-url').value = getWinDownloadUrl();
             document.getElementById('admin-win-name').value = getWinDownloadName();
+            document.getElementById('admin-discord-url').value = getDiscordUrl();
+            document.getElementById('admin-prerelease-toggle').checked = isPreReleaseEnabled();
             document.getElementById('admin-new-pw').value = '';
             openModal('admin-panel-modal');
         }
@@ -1045,10 +1114,14 @@
         function saveAdminSettings() {
             const winUrl = document.getElementById('admin-win-url').value.trim();
             const winName = document.getElementById('admin-win-name').value.trim();
+            const discordUrl = document.getElementById('admin-discord-url').value.trim();
+            const prerelease = document.getElementById('admin-prerelease-toggle').checked;
             const newPw = document.getElementById('admin-new-pw').value.trim();
 
             if (winUrl) localStorage.setItem('slate_win_url', winUrl);
             if (winName) localStorage.setItem('slate_win_name', winName);
+            if (discordUrl) localStorage.setItem('slate_discord_url', discordUrl);
+            localStorage.setItem('slate_prerelease', prerelease ? 'true' : 'false');
             if (newPw) localStorage.setItem('slate_admin_pw', newPw);
 
             initDynamicLinks();
@@ -1060,6 +1133,8 @@
             if (confirm('Möchtest du alle Admin-Einstellungen auf Standard zurücksetzen?')) {
                 localStorage.removeItem('slate_win_url');
                 localStorage.removeItem('slate_win_name');
+                localStorage.removeItem('slate_discord_url');
+                localStorage.removeItem('slate_prerelease');
                 localStorage.removeItem('slate_admin_pw');
                 initDynamicLinks();
                 alert('Einstellungen zurückgesetzt.');
