@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLATE CLIENT | Shop & Code einlösen</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        slateBg: '#09070f',
+                        slateAccent: '#9d4edd',
+                        slateGlow: '#c77dff',
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+                    boxShadow: { 'purple-glow': '0 0 35px -5px rgba(157, 78, 221, 0.45)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #09070f; color: #f1f0f7; }
+        .glass-panel { background: rgba(20, 15, 36, 0.65); backdrop-filter: blur(16px); border: 1px solid rgba(157, 78, 221, 0.18); }
+        .hud-window { background: rgba(14, 11, 24, 0.88); backdrop-filter: blur(20px); border: 1px solid rgba(199, 125, 255, 0.25); box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col justify-between p-4">
+
+    <!-- HEADER -->
+    <header class="max-w-4xl mx-auto w-full glass-panel rounded-2xl px-5 py-3 flex items-center justify-between mt-4">
+        <a href="index.html" class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-slateAccent to-purple-900 flex items-center justify-center text-white shadow-purple-glow">
+                <svg class="w-5 h-5 fill-current text-white" viewBox="0 0 24 24"><path d="M12 3L2 19h20L12 3z"/></svg>
+            </div>
+            <span class="font-extrabold text-lg text-white">SLATE CLIENT</span>
+        </a>
+        <a href="index.html" class="text-xs text-gray-400 hover:text-white"><i class="fa-solid fa-arrow-left mr-1"></i> Zurück zur Startseite</a>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-md mx-auto w-full py-12">
+        <div class="hud-window rounded-2xl p-6 sm:p-8 border border-slateAccent/40 shadow-purple-glow">
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 mx-auto mb-3">
+                    <i class="fa-solid fa-ticket text-xl"></i>
+                </div>
+                <h2 class="text-2xl font-extrabold text-white">Code Einlösen</h2>
+                <p class="text-xs text-gray-400 mt-1">Gib deinen Ingame-Namen und den Code ein.</p>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-300 mb-1">Ingame Minecraft Name</label>
+                    <input type="text" id="ign-input" placeholder="z.B. ansgorSW" class="w-full px-3.5 py-2.5 rounded-xl bg-slateBg border border-slateAccent/30 text-white text-sm outline-none focus:border-slateGlow font-mono">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-300 mb-1">Gutschein- / Produktcode</label>
+                    <input type="text" id="code-input" placeholder="SLATE-XXXX-XXXX" class="w-full px-3.5 py-2.5 rounded-xl bg-slateBg border border-slateAccent/30 text-white text-sm outline-none focus:border-slateGlow font-mono uppercase">
+                </div>
+
+                <button onclick="redeemCode()" class="w-full py-3 rounded-xl bg-gradient-to-r from-slateAccent to-purple-700 hover:from-purple-600 text-white font-bold text-sm shadow-purple-glow transition-all">
+                    Code Einlösen
+                </button>
+
+                <div id="result-box" class="hidden p-4 rounded-xl glass-panel border mt-4 text-center">
+                    <div id="result-icon" class="text-2xl mb-1"></div>
+                    <div id="result-title" class="text-sm font-bold text-white"></div>
+                    <div id="result-desc" class="text-xs text-gray-300 mt-1"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center text-xs text-gray-500 py-4">
+        © 2026 Slate Client · Firebase Code-System
+    </footer>
+
+    <!-- Firebase SDK (Modular v10 oder Standard v8 - Hier Firebase Realtime DB REST/JS Integration beispielhaft) -->
+    <script>
+        // HINWEIS: Ersetze dies mit deiner echten Firebase Realtime Database URL
+        const FIREBASE_DB_URL = "https://DEINE-FIREBASE-DATABASE.firebaseio.com";
+
+        async function redeemCode() {
+            const ign = document.getElementById('ign-input').value.trim();
+            const code = document.getElementById('code-input').value.trim().toUpperCase();
+            const resultBox = document.getElementById('result-box');
+            const resultIcon = document.getElementById('result-icon');
+            const resultTitle = document.getElementById('result-title');
+            const resultDesc = document.getElementById('result-desc');
+
+            if (!ign || !code) {
+                alert('Bitte fülle beide Felder aus!');
+                return;
+            }
+
+            try {
+                // 1. Code in Firebase unter der Kategorie prüfen
+                // Struktur in Firebase: /codes/{code} -> { role: "Slate+", active: true }
+                let response = await fetch(`${FIREBASE_DB_URL}/codes/${code}.json`);
+                let codeData = await response.json();
+
+                if (!codeData || codeData.active !== true) {
+                    resultBox.className = "p-4 rounded-xl glass-panel border border-red-500/40 bg-red-500/10 mt-4 text-center";
+                    resultIcon.innerHTML = "❌";
+                    resultTitle.innerText = "Ungültiger oder abgelaufener Code";
+                    resultDesc.innerText = "Dieser Code existiert nicht oder wurde bereits eingelöst.";
+                    resultBox.classList.remove('hidden');
+                    return;
+                }
+
+                let rewardRole = codeData.role || "Slate+";
+
+                // 2. Dem Spieler die Rolle in Firebase zuweisen
+                // Struktur in Firebase: /users/{ign} -> { role: "Slate+" }
+                await fetch(`${FIREBASE_DB_URL}/users/${ign}.json`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ role: rewardRole })
+                });
+
+                // 3. Code in Firebase deaktivieren (damit er nicht mehr nutzbar ist)
+                await fetch(`${FIREBASE_DB_URL}/codes/${code}.json`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ active: false, redeemedBy: ign })
+                });
+
+                // Erfolg anzeigen
+                resultBox.className = "p-4 rounded-xl glass-panel border border-emerald-500/40 bg-emerald-500/10 mt-4 text-center";
+                resultIcon.innerHTML = "🎉";
+                resultTitle.innerText = `Erfolgreich eingelöst!`;
+                resultDesc.innerText = `Der Spieler "${ign}" hat die Rolle [${rewardRole}] erhalten. Der Code wurde deaktiviert.`;
+                resultBox.classList.remove('hidden');
+
+            } catch (error) {
+                console.error(error);
+                alert('Fehler bei der Verbindung zur Datenbank.');
+            }
+        }
+    </script>
+</body>
+</html>
