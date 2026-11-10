@@ -89,14 +89,13 @@
     <div class="fixed inset-0 bg-grid-pattern opacity-40 pointer-events-none z-0"></div>
 
     <!-- HEADER / NAVIGATION -->
-    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4 px-4 sm:px-8">
+   <!-- HEADER / NAVIGATION -->
+    <header class="fixed top-0 left-0 right-0 z-50 py-4 px-4 sm:px-8">
         <div class="max-w-7xl mx-auto glass-panel rounded-2xl px-5 py-3 flex items-center justify-between shadow-purple-glow-sm">
             <!-- Brand Logo (5x Click Trigger for Admin) -->
             <a href="#" class="flex items-center gap-3 group" onclick="handleSlateTextClick(event)">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-slateAccent to-purple-900 flex items-center justify-center text-white shadow-purple-glow group-hover:scale-105 transition-transform duration-300">
-                    <svg class="w-6 h-6 fill-current text-white" viewBox="0 0 24 24">
-                        <path d="M12 3L2 19h20L12 3zm0 4.2L17.5 17h-11L12 7.2z" />
-                    </svg>
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-slateAccent to-purple-900 flex items-center justify-center text-white shadow-purple-glow">
+                    <svg class="w-6 h-6 fill-current text-white" viewBox="0 0 24 24"><path d="M12 3L2 19h20L12 3zm0 4.2L17.5 17h-11L12 7.2z"/></svg>
                 </div>
                 <div>
                     <span class="font-extrabold text-xl tracking-wider text-white flex items-center gap-2 select-none">
@@ -106,44 +105,27 @@
                 </div>
             </a>
 
-            <!-- Nav Links -->
-            <nav class="hidden lg:flex items-center gap-7 text-sm font-medium text-gray-300">
-                <a href="#modules" class="hover:text-slateGlow transition-colors">Module & HUD</a>
+            <!-- Desktop Nav Links -->
+            <nav class="hidden lg:flex items-center gap-6 text-sm font-medium text-gray-300">
+                <a href="#modules" class="hover:text-slateGlow transition-colors">Module</a>
                 <a href="#cosmetics" class="hover:text-slateGlow transition-colors">Cosmetics</a>
-                <a href="#skins" class="hover:text-slateGlow transition-colors">Skin-Manager</a>
-                <a href="#icons" class="hover:text-slateGlow transition-colors">Badges & Icons</a>
-                <a href="#emotes" class="hover:text-slateGlow transition-colors">Emotes</a>
-                <a href="#friends" class="hover:text-slateGlow transition-colors">Freunde</a>
-                <a href="#multi-instance" class="hover:text-slateGlow transition-colors text-slateGlow font-bold">Multi-Instance</a>
+                <a href="Shop.html" class="text-amber-400 hover:text-amber-300 transition-colors font-bold flex items-center gap-1.5"><i class="fa-solid fa-ticket"></i> Shop / Code einlösen</a>
                 <a href="#about" class="hover:text-slateGlow transition-colors">Über uns</a>
             </nav>
 
             <!-- Action Buttons -->
             <div class="flex items-center gap-3">
-                <button onclick="openModal('download-modal')" class="relative group overflow-hidden rounded-xl p-[1px] font-semibold text-sm">
-                    <span class="absolute inset-0 bg-gradient-to-r from-slateAccent via-purple-500 to-slateGlow rounded-xl group-hover:opacity-100 opacity-80 transition-opacity"></span>
-                    <span class="relative px-4 py-2.2 rounded-[11px] bg-slateBg flex items-center gap-2 text-white group-hover:bg-transparent transition-all duration-300">
-                        <i class="fa-solid fa-download text-slateGlow group-hover:text-white transition-colors"></i>
-                        <span>Download</span>
-                    </span>
-                </button>
-                <button onclick="toggleMobileMenu()" class="lg:hidden text-gray-300 hover:text-white p-2">
-                    <i class="fa-solid fa-bars text-xl"></i>
-                </button>
+                <button onclick="openModal('download-modal')" class="px-4 py-2 rounded-xl bg-slateAccent text-white text-sm font-semibold shadow-purple-glow">Download</button>
+                <button onclick="toggleMobileMenu()" class="lg:hidden text-gray-300 hover:text-white p-2"><i class="fa-solid fa-bars text-xl"></i></button>
             </div>
         </div>
 
         <!-- Mobile Menu Dropdown -->
         <div id="mobile-menu" class="hidden lg:hidden max-w-7xl mx-auto mt-2 glass-panel rounded-2xl p-5 flex-col gap-4 text-center border border-slateAccent/30 shadow-2xl">
-            <a href="#modules" onclick="toggleMobileMenu()" class="text-gray-300 hover:text-slateGlow py-1">Module & HUD</a>
+            <a href="#modules" onclick="toggleMobileMenu()" class="text-gray-300 hover:text-slateGlow py-1">Module</a>
             <a href="#cosmetics" onclick="toggleMobileMenu()" class="text-gray-300 hover:text-slateGlow py-1">Cosmetics</a>
-            <a href="#skins" onclick="toggleMobileMenu()" class="text-gray-300 hover:text-slateGlow py-1">Skin-Manager</a>
-            <a href="#icons" onclick="toggleMobileMenu()" class="text-gray-300 hover:text-slateGlow py-1">Badges & Icons</a>
-            <a href="#emotes" onclick="toggleMobileMenu()" class="text-gray-300 hover:text-slateGlow py-1">Emote Wheel</a>
-            <a href="#friends" onclick="toggleMobileMenu()" class="text-gray-300 hover:text-slateGlow py-1">Freunde</a>
-            <a href="#multi-instance" onclick="toggleMobileMenu()" class="text-slateGlow py-1 font-bold">Multi-Instance</a>
+            <a href="Shop.html" class="text-amber-400 font-bold py-1 flex items-center justify-center gap-2"><i class="fa-solid fa-ticket"></i> Shop / Code einlösen</a>
             <a href="#about" onclick="toggleMobileMenu()" class="text-gray-300 hover:text-slateGlow py-1">Über uns</a>
-            <button onclick="openModal('impressum-modal'); toggleMobileMenu()" class="text-gray-400 text-xs py-1">Impressum & Datenschutz</button>
         </div>
     </header>
 
