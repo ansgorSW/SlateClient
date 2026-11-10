@@ -3,8 +3,7 @@
 	"credit": "Hosted by Cosmetica",
 	"texture_size": [128, 128],
 	"textures": {
-		"2": "wingsclown.png",
-		"particle": "wingsclown.png"
+		"2": "wingsclown.png"
 	},
 	"elements": [
 		{
