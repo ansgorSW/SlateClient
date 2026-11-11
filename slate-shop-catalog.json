@@ -1,0 +1,117 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "type": "capes",
+      "id": "Migrator",
+      "filename": "Migrator.png",
+      "modelFile": "",
+      "textureFile": "",
+      "title": "Migrator"
+    },
+    {
+      "type": "capes",
+      "id": "Mojang",
+      "filename": "Mojang.png",
+      "modelFile": "",
+      "textureFile": "",
+      "title": "Mojang"
+    },
+    {
+      "type": "capes",
+      "id": "Moonlight_Trail",
+      "filename": "Moonlight Trail.png",
+      "modelFile": "",
+      "textureFile": "",
+      "title": "Moonlight Trail"
+    },
+    {
+      "type": "capes",
+      "id": "Twisted",
+      "filename": "Twisted.png",
+      "modelFile": "",
+      "textureFile": "",
+      "title": "Twisted"
+    },
+    {
+      "type": "capes",
+      "id": "zzv2",
+      "filename": "zzv2.png",
+      "modelFile": "",
+      "textureFile": "",
+      "title": "zzv2"
+    },
+    {
+      "type": "wings",
+      "id": "wingsclown",
+      "filename": "",
+      "modelFile": "wingsclown.json",
+      "textureFile": "wingsclown.png",
+      "title": "wingsclown"
+    },
+    {
+      "type": "wings",
+      "id": "zickzack",
+      "filename": "",
+      "modelFile": "zickzack.json",
+      "textureFile": "zickzack.png",
+      "title": "zickzack"
+    },
+    {
+      "type": "emotes",
+      "id": "Amongus",
+      "filename": "Amongus.emotecraft",
+      "modelFile": "",
+      "textureFile": "",
+      "title": "Amongus"
+    },
+    {
+      "type": "emotes",
+      "id": "Breakdance_Flare",
+      "filename": "Breakdance Flare.emotecraft",
+      "modelFile": "",
+      "textureFile": "",
+      "title": "Breakdance Flare"
+    },
+    {
+      "type": "emotes",
+      "id": "cool_sit",
+      "filename": "cool sit.emotecraft",
+      "modelFile": "",
+      "textureFile": "",
+      "title": "cool sit"
+    },
+    {
+      "type": "emotes",
+      "id": "Hi",
+      "filename": "Hi.emotecraft",
+      "modelFile": "",
+      "textureFile": "",
+      "title": "Hi"
+    },
+    {
+      "type": "emotes",
+      "id": "T-Pose",
+      "filename": "T-Pose.emotecraft",
+      "modelFile": "",
+      "textureFile": "",
+      "title": "T Pose"
+    },
+    {
+      "type": "emotes",
+      "id": "Ta_da_",
+      "filename": "Ta da!.emotecraft",
+      "modelFile": "",
+      "textureFile": "",
+      "title": "Ta da!"
+    },
+    {
+      "type": "emotes",
+      "id": "Take_The_L",
+      "filename": "Take The L.emotecraft",
+      "modelFile": "",
+      "textureFile": "",
+      "title": "Take The L"
+    }
+  ]
+}
