@@ -117,13 +117,13 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:40px}
 <section id="dl"><div class="c rv"><h2>Bereit für mehr Fokus?</h2><p class="l">Lade Slate für Fabric 26.3 herunter und spiele auf dem SlateSMP.</p><button class="btn" onclick="openM('dlm')">Download (Fabric 26.3)</button></div></section>
 <footer>© 2026 Slate Client · Hinweis: Darstellungen können vom tatsächlichen Client leicht abweichen. · <a href="#" onclick="adminOpen();return false" style="color:var(--gl);opacity:.6">🔒 Admin</a></footer>
 
-<div class="mo" id="dlm"><div class="mb"><button class="x" onclick="closeM('dlm')">×</button><h3>Slate Launcher herunterladen</h3><p class="sub">Wähle dein Betriebssystem (Fabric 26.3)</p>
+<div class="mo" id="dlm"><div class="mb"><button class="x" onclick="closeM('dlm')">×</button><h3>Slate Launcher herunterladen</h3><p class="sub">Fabric 26.3 · Zugang über Discord</p>
 <a class="opt" id="winb" href="#" download><span>🪟 Windows <small id="winn">Slate-Launcher-Installer.exe</small></span><span>↓</span></a>
-<div class="opt warn" id="pre" style="display:none"><b style="font-size:12px">⚗️ PRE-RELEASE PHASE</b><p style="font-size:12px;color:#cfc9e6;margin:6px 0 12px">Der Download ist vorerst nur über unseren Discord-Server mit einer Tester-Bewerbung verfügbar.</p><a class="btn" id="disc" target="_blank" style="display:block;text-align:center;padding:10px;font-size:13px;background:#4f46e5;box-shadow:none" href="#">Auf Discord als Tester bewerben</a></div>
+<div class="opt warn" id="pre" style="display:none"><b style="font-size:12px">⚗️ PRE-RELEASE PHASE</b><p style="font-size:12px;color:#cfc9e6;margin:6px 0 12px">Den Download gibt es aktuell nur über unseren Discord-Server. Tritt bei und bewirb dich dort als Tester.</p><a class="btn" id="disc" target="_blank" style="display:block;text-align:center;padding:10px;font-size:13px;background:#4f46e5;box-shadow:none" href="#">Discord beitreten &amp; bewerben</a></div>
 <div class="opt dis"><span>🐧 Linux <small>Demnächst</small></span><span>🔒</span></div></div></div>
 <div class="mo" id="alm"><div class="mb"><button class="x" onclick="closeM('alm')">×</button><h3>Admin Authentifizierung</h3><p class="sub">Bitte Passwort eingeben</p><form onsubmit="adminLogin(event)"><input type="password" id="apw" placeholder="Passwort eingeben..."><div id="aerr" style="display:none;color:#f87171;font-size:12px;text-align:center;margin-bottom:10px">Falsches Passwort.</div><button class="btn" style="width:100%">Anmelden</button></form></div></div>
 <div class="mo" id="apm"><div class="mb"><button class="x" onclick="closeM('apm')">×</button><h3>Slate Admin Control Center</h3><p class="sub">Downloads, Pre-Release &amp; Passwort</p>
-<label style="display:flex;justify-content:space-between;align-items:center"><span>Pre-Release Modus (sperrt Download)</span><input type="checkbox" id="apre"></label><div style="height:12px"></div>
+
 <label>Discord-Link</label><input type="text" id="adc" placeholder="https://discord.gg/deinlink"><label>Download-Link (URL)</label><input type="text" id="aurl" placeholder="https://..."><label>Dateiname</label><input type="text" id="anm" placeholder="Slate-Launcher-Installer.exe"><label>Neues Admin-Passwort</label><input type="password" id="anp" placeholder="Leer lassen = unverändert">
 <div class="row"><button class="btn" onclick="adminSave()">Speichern</button><button class="btn g" onclick="adminReset()">Zurücksetzen</button></div></div></div>
 <script>
@@ -152,18 +152,18 @@ await fetch(DB+'/codes/'+encodeURIComponent(code)+'.json',{method:'PATCH',body:J
 show('rgba(16,185,129,.15)','Erfolgreich! '+ign+' hat die Rolle ['+role+'] erhalten.')}catch(e){show('rgba(239,68,68,.15)','Fehler bei der Verbindung zur Datenbank.')}}
 const ign_=document.getElementById('ign'),code_=document.getElementById('code');
 
-const K={url:'slate_win_url',nm:'slate_win_name',dc:'slate_discord_url',pre:'slate_prerelease',pw:'slate_admin_pw'},DEF={url:'#',nm:'Slate-Launcher-Installer.exe',dc:'https://discord.gg',pw:'GHG'};
+const K={url:'slate_win_url',nm:'slate_win_name',dc:'slate_discord_url',pre:'slate_prerelease',pw:'slate_admin_pw'},DEF={url:'#',nm:'Slate-Launcher-Installer.exe',dc:'https://discord.gg/98r9x637jv',pw:'GHG'};
 const gs=k=>{try{return localStorage.getItem(K[k])}catch(e){return null}},ss=(k,v)=>{try{localStorage.setItem(K[k],v)}catch(e){}},ds=k=>{try{localStorage.removeItem(K[k])}catch(e){}};
 const g=(k)=>gs(k)||DEF[k],E=id=>document.getElementById(id);
 function openM(id){const m=E(id);m.style.display='grid';requestAnimationFrame(()=>m.classList.add('show'))}
 function closeM(id){const m=E(id);m.classList.remove('show');setTimeout(()=>m.style.display='none',300)}
 document.querySelectorAll('.mo').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeM(m.id)}));
-function links(){const p=gs('pre')==='true';E('disc').href=g('dc');E('winb').style.display=p?'none':'flex';E('pre').style.display=p?'block':'none';E('winb').href=g('url');E('winn').textContent=g('nm')}
+function links(){const p=true;E('disc').href='https://discord.gg/98r9x637jv';E('winb').style.display=p?'none':'flex';E('pre').style.display=p?'block':'none';E('winb').href=g('url');E('winn').textContent=g('nm')}
 links();
 let cc=0,ct;function logoClick(){cc++;if(cc===1)ct=setTimeout(()=>cc=0,3000);if(cc>=5){clearTimeout(ct);cc=0;adminOpen()}}
 function adminOpen(){E('apw').value='';E('aerr').style.display='none';openM('alm')}
-function adminLogin(e){e.preventDefault();if(E('apw').value===g('pw')){closeM('alm');E('aurl').value=g('url');E('anm').value=g('nm');E('adc').value=g('dc');E('apre').checked=gs('pre')==='true';E('anp').value='';setTimeout(()=>openM('apm'),320)}else E('aerr').style.display='block'}
-function adminSave(){const v=id=>E(id).value.trim();if(v('aurl'))ss('url',v('aurl'));if(v('anm'))ss('nm',v('anm'));if(v('adc'))ss('dc',v('adc'));ss('pre',E('apre').checked);if(v('anp'))ss('pw',v('anp'));links();alert('Einstellungen gespeichert!');closeM('apm')}
+function adminLogin(e){e.preventDefault();if(E('apw').value===g('pw')){closeM('alm');E('aurl').value=g('url');E('anm').value=g('nm');E('adc').value=g('dc');E('anp').value='';setTimeout(()=>openM('apm'),320)}else E('aerr').style.display='block'}
+function adminSave(){const v=id=>E(id).value.trim();if(v('aurl'))ss('url',v('aurl'));if(v('anm'))ss('nm',v('anm'));if(v('adc'))ss('dc',v('adc'));if(v('anp'))ss('pw',v('anp'));links();alert('Einstellungen gespeichert!');closeM('apm')}
 function adminReset(){if(confirm('Alle Admin-Einstellungen zurücksetzen?')){Object.keys(K).forEach(ds);links();closeM('apm')}}
 
 const SV=[['slatesmp.de',35],['freunde-survival.net',48],['minigames.example',27]],MS=[['Willkommen zurück!','Alex: Wer kommt zum Spawn?','Server: Daily bereit'],['Emilio__H: Base ist fertig','Noni_YT: Kommst du Mine?','Lena: Brauche Eisen'],['Game: Runde startet','Tom: GG!','Game: Neue Map']],log=[[],[],[]],un=[0,0,0];let cur=0;
